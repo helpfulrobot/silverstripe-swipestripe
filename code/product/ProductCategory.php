@@ -8,20 +8,21 @@
  * @package swipestripe
  * @subpackage product
  */
-class ProductCategory extends Page {
+class ProductCategory extends Page
+{
 
-  /**
+    /**
    * Many many relations for a ProductCategory
    * 
    * @var Array
    */
-	public static $many_many = array(
+    public static $many_many = array(
     'Products' => 'Product'
   );
   
-  public static $many_many_extraFields = array(
-		'Products' => array(
-			'ProductOrder' => 'Int'
+    public static $many_many_extraFields = array(
+        'Products' => array(
+            'ProductOrder' => 'Int'
     )
   );
   
@@ -31,19 +32,20 @@ class ProductCategory extends Page {
    * @var Array
    */
   public static $summary_fields = array(
-	  'Title' => 'Name',
+      'Title' => 'Name',
     'MenuTitle' => 'Menu Title'
-	);
+    );
     
-	/**
-	 * Can add products to the category straight from the ProductCategory page
-	 * TODO remove this, its not useful. And change the direction of the many_many relation so that patched version of CTF not needed
-	 * 
-	 * @see Page::getCMSFields()
-	 * @return FieldSet
-	 */
-	function getCMSFields() {
-    $fields = parent::getCMSFields();
+    /**
+     * Can add products to the category straight from the ProductCategory page
+     * TODO remove this, its not useful. And change the direction of the many_many relation so that patched version of CTF not needed
+     * 
+     * @see Page::getCMSFields()
+     * @return FieldSet
+     */
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
     
     /*
     //Product categories
@@ -56,19 +58,19 @@ class ProductCategory extends Page {
     );
     $manager->setPermissions(array());
     $fields->addFieldToTab("Root.Content.Products", $manager);
-		*/
+        */
     
-	  if (file_exists(BASE_PATH . '/swipestripe') && ShopSettings::get_license_key() == null) {
-			$fields->addFieldToTab("Root.Content.Main", new LiteralField("SwipeStripeLicenseWarning", 
-				'<p class="message warning">
+      if (file_exists(BASE_PATH . '/swipestripe') && ShopSettings::get_license_key() == null) {
+          $fields->addFieldToTab("Root.Content.Main", new LiteralField("SwipeStripeLicenseWarning",
+                '<p class="message warning">
 					 Warning: You have SwipeStripe installed without a license key. 
 					 Please <a href="http://swipestripe.com" target="_blank">purchase a license key here</a> before this site goes live.
 				</p>'
-			), "Title");
-		}
+            ), "Title");
+      }
     
-    return $fields;
-	}
+        return $fields;
+    }
 }
 
 /**
@@ -79,9 +81,10 @@ class ProductCategory extends Page {
  * @package swipestripe
  * @subpackage product
  */
-class ProductCategory_Controller extends Page_Controller {
+class ProductCategory_Controller extends Page_Controller
+{
   
-  /**
+    /**
    * Set number of products per page displayed in ProductCategory pages
    * 
    * @var Int
@@ -96,14 +99,15 @@ class ProductCategory_Controller extends Page_Controller {
    */
   public static $products_ordered_by = "\"ProductCategory_Products\".\"ProductOrder\" DESC";
   
-	/**
+    /**
    * Include some CSS.
    * 
    * @see Page_Controller::init()
    */
-  function init() {
-    parent::init();
-    Requirements::css('swipestripe/css/Shop.css');
+  public function init()
+  {
+      parent::init();
+      Requirements::css('swipestripe/css/Shop.css');
   }
 
   /**
@@ -112,26 +116,27 @@ class ProductCategory_Controller extends Page_Controller {
    * 
    * @see Page_Controller::Products()
    * @return FieldSet
-   */  
-  public function Products() {
-
-    if(!isset($_GET['start']) || !is_numeric($_GET['start']) || (int)$_GET['start'] < 1) $_GET['start'] = 0;
+   */
+  public function Products()
+  {
+      if (!isset($_GET['start']) || !is_numeric($_GET['start']) || (int)$_GET['start'] < 1) {
+          $_GET['start'] = 0;
+      }
       
-    $start = (int)$_GET['start'];
-    $limit = self::$products_per_page;
-    $orderBy = self::$products_ordered_by;
+      $start = (int)$_GET['start'];
+      $limit = self::$products_per_page;
+      $orderBy = self::$products_ordered_by;
     
-    $products = DataObject::get( 
-       'Product', 
-       "\"ProductCategory_Products\".\"ProductCategoryID\" = '".$this->ID."' OR \"ParentID\" = '".$this->ID."'", 
-       $orderBy, 
+      $products = DataObject::get(
+       'Product',
+       "\"ProductCategory_Products\".\"ProductCategoryID\" = '".$this->ID."' OR \"ParentID\" = '".$this->ID."'",
+       $orderBy,
        "LEFT JOIN \"ProductCategory_Products\" ON \"ProductCategory_Products\".\"ProductID\" = \"Product\".\"ID\"",
        "{$start}, $limit"
-    ); 
+    );
 
-    $this->extend('updateCategoryProducts', $products);
+      $this->extend('updateCategoryProducts', $products);
 
-    return $products;
+      return $products;
   }
-
 }

@@ -7,9 +7,10 @@
  * @package swipestripe
  * @subpackage form
  */
-class OptionGroupField extends CompositeField {
-	
-  /**
+class OptionGroupField extends CompositeField
+{
+    
+    /**
    * Holds the current {@link Product} we are viewing
    * 
    * @var Product
@@ -22,51 +23,55 @@ class OptionGroupField extends CompositeField {
    * @param String $name
    * @param Product $product
    */
-	function __construct($name, $product) {
-		$this->name = $name;
-		$this->product = $product;
-		
-		//Set an extra class for the wrapper
-		$this->addExtraClass('OptionGroupField');
-		
-		//Set an ID
-		$this->setID('ProductOptions_'.$product->ID);
-		
-		//Use the product to get the attributes and options and set them to the class
-		$items = new FieldSet();
-	  $attributes = $this->product->Attributes()->map('ID', 'Label');
-	  
-    if ($attributes) foreach ($attributes as $id => $title) {
+    public function __construct($name, $product)
+    {
+        $this->name = $name;
+        $this->product = $product;
+        
+        //Set an extra class for the wrapper
+        $this->addExtraClass('OptionGroupField');
+        
+        //Set an ID
+        $this->setID('ProductOptions_'.$product->ID);
+        
+        //Use the product to get the attributes and options and set them to the class
+        $items = new FieldSet();
+        $attributes = $this->product->Attributes()->map('ID', 'Label');
       
-      $options = $this->product->getOptionsForAttribute($id);
+        if ($attributes) {
+            foreach ($attributes as $id => $title) {
+                $options = $this->product->getOptionsForAttribute($id);
 
-      if ($options->exists()) {
-        $optionsField = new OptionField($id, $title, $options);
-        $items->push($optionsField);
-      }
+                if ($options->exists()) {
+                    $optionsField = new OptionField($id, $title, $options);
+                    $items->push($optionsField);
+                }
+            }
+        }
+        parent::__construct($items);
     }
-		parent::__construct($items);
-	}
-	
-	/**
-	 * This field has data
-	 * 
-	 * @see CompositeField::hasData()
-	 * @return Boolean True always
-	 */
-	function hasData() {
-		return true;
-	}
-	
-	/**
-	 * Display this field, add some javascript for handling changes to the dropdowns,
-	 * populating the next dropdown via AJAX etc.
-	 * 
-	 * @see CompositeField::FieldHolder()
-	 */
-	function FieldHolder() {
-		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-		Requirements::javascript('swipestripe/javascript/OptionGroupField.js');
-		return parent::FieldHolder();
-	}
+    
+    /**
+     * This field has data
+     * 
+     * @see CompositeField::hasData()
+     * @return Boolean True always
+     */
+    public function hasData()
+    {
+        return true;
+    }
+    
+    /**
+     * Display this field, add some javascript for handling changes to the dropdowns,
+     * populating the next dropdown via AJAX etc.
+     * 
+     * @see CompositeField::FieldHolder()
+     */
+    public function FieldHolder()
+    {
+        Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+        Requirements::javascript('swipestripe/javascript/OptionGroupField.js');
+        return parent::FieldHolder();
+    }
 }

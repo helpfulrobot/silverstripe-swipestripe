@@ -8,50 +8,46 @@
  * @package swipestripe
  * @subpackage form
  */
-class VariationMoneyField extends MoneyField {
+class VariationMoneyField extends MoneyField
+{
   
-	/**
-	 * Validate this form field, make sure the {@link Variation} amount is not negative.
-	 * 
-	 * @see FormField::validate()
-	 * @return Boolean
-	 */
-	function validate($validator) {
-
-	  $valid = true;
-	  $amount = $this->Value();
-	  
-	  if (!$amount || !isset($amount['Amount'])) {
-	    
-	    $errorMessage = _t('Form.VARIATION_PRICE_NOT_EXISTS', 'There is a problem with the variation price.');
-  		if ($msg = $this->getCustomValidationMessage()) {
-  			$errorMessage = $msg;
-  		}
+    /**
+     * Validate this form field, make sure the {@link Variation} amount is not negative.
+     * 
+     * @see FormField::validate()
+     * @return Boolean
+     */
+    public function validate($validator)
+    {
+        $valid = true;
+        $amount = $this->Value();
       
-      $validator->validationError(
-  			$this->Name(),
-  			$errorMessage,
-  			"error"
-  		);
-  		$valid = false;
-	  }
-	  else if ($amount['Amount'] < 0) {
-	    
-	    $errorMessage = _t('Form.VARIATION_PRICE_NEGATIVE', 'This variation price is negative.');
-  		if ($msg = $this->getCustomValidationMessage()) {
-  			$errorMessage = $msg;
-  		}
+        if (!$amount || !isset($amount['Amount'])) {
+            $errorMessage = _t('Form.VARIATION_PRICE_NOT_EXISTS', 'There is a problem with the variation price.');
+            if ($msg = $this->getCustomValidationMessage()) {
+                $errorMessage = $msg;
+            }
       
-      $validator->validationError(
-  			$this->Name(),
-  			$errorMessage,
-  			"error"
-  		);
-  		$valid = false;
-	  }
+            $validator->validationError(
+            $this->Name(),
+            $errorMessage,
+            "error"
+        );
+            $valid = false;
+        } elseif ($amount['Amount'] < 0) {
+            $errorMessage = _t('Form.VARIATION_PRICE_NEGATIVE', 'This variation price is negative.');
+            if ($msg = $this->getCustomValidationMessage()) {
+                $errorMessage = $msg;
+            }
+      
+            $validator->validationError(
+            $this->Name(),
+            $errorMessage,
+            "error"
+        );
+            $valid = false;
+        }
 
-	  return $valid;
-	}
-	
+        return $valid;
+    }
 }
-

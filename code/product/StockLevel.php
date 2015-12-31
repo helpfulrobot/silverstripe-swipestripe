@@ -13,9 +13,10 @@
  * @package swipestripe
  * @subpackage product
  */
-class StockLevel extends DataObject {
+class StockLevel extends DataObject
+{
   
-  /**
+    /**
    * The stock level value (Int)
    * 
    * @var Array

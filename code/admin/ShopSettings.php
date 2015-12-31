@@ -8,9 +8,10 @@
  * @package swipestripe
  * @subpackage admin
  */
-class ShopSettings extends DataObjectDecorator {
+class ShopSettings extends DataObjectDecorator
+{
   
-  /**
+    /**
    * To hold the license key for SwipeStripe. Usually set in mysite/_config file.
    * 
    * @see ShopSettings::set_license_key()
@@ -31,17 +32,19 @@ class ShopSettings extends DataObjectDecorator {
    * 
    * @param String $key License key
    */
-  public static function set_license_key($key) {
-    self::$license_key = $key;
+  public static function set_license_key($key)
+  {
+      self::$license_key = $key;
   }
   
-	/**
+    /**
    * Get the license key
    * 
    * @return String License key
    */
-  public static function get_license_key() {
-    return self::$license_key;
+  public static function get_license_key()
+  {
+      return self::$license_key;
   }
   
   /**
@@ -49,17 +52,19 @@ class ShopSettings extends DataObjectDecorator {
    * 
    * @param Array $key 
    */
-  public static function set_extension_license_keys(Array $keys) {
-    self::$extension_license_keys = $keys;
-  } 
+  public static function set_extension_license_keys(array $keys)
+  {
+      self::$extension_license_keys = $keys;
+  }
 
   /**
    * Get extension license keys
    * 
    * @return Array Extension license keys
    */
-  public static function get_extension_license_keys() {
-    return self::$extension_license_keys;
+  public static function get_extension_license_keys()
+  {
+      return self::$extension_license_keys;
   }
 
   /**
@@ -67,109 +72,108 @@ class ShopSettings extends DataObjectDecorator {
    * 
    * @see DataObjectDecorator::extraStatics()
    */
-	function extraStatics() {
+    public function extraStatics()
+    {
+        return array(
+            'db' => array(
+            'EmailSignature' => 'HTMLText',
+                'ReceiptSubject' => 'Varchar',
+            'ReceiptBody' => 'HTMLText',
+            'ReceiptFrom' => 'Varchar',
+                'NotificationSubject' => 'Varchar',
+            'NotificationBody' => 'HTMLText',
+            'NotificationTo' => 'Varchar'
+            ),
+            'has_many' => array(
+              'ShippingCountries' => 'Country_Shipping',
+            'BillingCountries' => 'Country_Billing',
+              'ShippingRegions' => 'Region_Shipping',
+              'BillingRegions' => 'Region_Billing'
+            )
+        );
+    }
 
-		return array(
-			'db' => array(
-		    'EmailSignature' => 'HTMLText',
-				'ReceiptSubject' => 'Varchar',
-		    'ReceiptBody' => 'HTMLText',
-		    'ReceiptFrom' => 'Varchar',
-				'NotificationSubject' => 'Varchar',
-		    'NotificationBody' => 'HTMLText',
-		    'NotificationTo' => 'Varchar'
-			),
-			'has_many' => array(
-			  'ShippingCountries' => 'Country_Shipping',
-		    'BillingCountries' => 'Country_Billing',
-			  'ShippingRegions' => 'Region_Shipping',
-			  'BillingRegions' => 'Region_Billing'
-			)
-		);
-	}
-
-	/**
-	 * Adding fields for shop settings such as email, license key.
-	 * 
-	 * @see DataObjectDecorator::updateCMSFields()
-	 */
-  function updateCMSFields(FieldSet &$fields) {
-
-    $fields->findOrMakeTabSet('Root.Shop');
+    /**
+     * Adding fields for shop settings such as email, license key.
+     * 
+     * @see DataObjectDecorator::updateCMSFields()
+     */
+  public function updateCMSFields(FieldSet &$fields)
+  {
+      $fields->findOrMakeTabSet('Root.Shop');
     
     //License key
-    $fields->addFieldToTab("Root.Shop", 
+    $fields->addFieldToTab("Root.Shop",
       new Tab('LicenseKey')
     );
-    $licenseKeyField = new TextField('LicenseKey', _t('ShopSettings.LICENSEKEY', 'License Key'), self::$license_key);
-    $fields->addFieldToTab('Root.Shop.LicenseKey', $licenseKeyField->performReadonlyTransformation());
+      $licenseKeyField = new TextField('LicenseKey', _t('ShopSettings.LICENSEKEY', 'License Key'), self::$license_key);
+      $fields->addFieldToTab('Root.Shop.LicenseKey', $licenseKeyField->performReadonlyTransformation());
     
     //TODO include the license here in a text area field and some info about setting the license key perhaps
-    
+
     //Shop emails
-    $fields->addFieldToTab("Root.Shop", 
+    $fields->addFieldToTab("Root.Shop",
       new TabSet('Emails')
     );
-    $fields->addFieldToTab("Root.Shop.Emails", 
+      $fields->addFieldToTab("Root.Shop.Emails",
       new Tab('Receipt'),
       new Tab('Notification')
     );
 
-    $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextField('ReceiptFrom', _t('ShopSettings.FROM', 'From')));
-    $receiptTo = new TextField('ReceiptTo', _t('ShopSettings.TO', 'To'));
-    $receiptTo->setValue(_t('ShopSettings.RECEIPT_TO', 'Sent to customer'));
-    $receiptTo = $receiptTo->performReadonlyTransformation();
-    $fields->addFieldToTab('Root.Shop.Emails.Receipt', $receiptTo);
-    $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextField('ReceiptSubject', _t('ShopSettings.SUBJECT_LINE', 'Subject line')));
-    $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextareaField('ReceiptBody', _t('ShopSettings.MESSAGE', 'Message (order details are included in the email)'), 8));
-    $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextareaField('EmailSignature', _t('ShopSettings.SIGNATURE', 'Signature'), 8));
+      $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextField('ReceiptFrom', _t('ShopSettings.FROM', 'From')));
+      $receiptTo = new TextField('ReceiptTo', _t('ShopSettings.TO', 'To'));
+      $receiptTo->setValue(_t('ShopSettings.RECEIPT_TO', 'Sent to customer'));
+      $receiptTo = $receiptTo->performReadonlyTransformation();
+      $fields->addFieldToTab('Root.Shop.Emails.Receipt', $receiptTo);
+      $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextField('ReceiptSubject', _t('ShopSettings.SUBJECT_LINE', 'Subject line')));
+      $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextareaField('ReceiptBody', _t('ShopSettings.MESSAGE', 'Message (order details are included in the email)'), 8));
+      $fields->addFieldToTab('Root.Shop.Emails.Receipt', new TextareaField('EmailSignature', _t('ShopSettings.SIGNATURE', 'Signature'), 8));
     
-    $notificationFrom = new TextField('NotificationFrom', _t('ShopSettings.FROM', 'From'));
-    $notificationFrom->setValue(_t('ShopSettings.NOTIFICATION_FROM', 'Customer email address'));
-    $notificationFrom = $notificationFrom->performReadonlyTransformation();
-    $fields->addFieldToTab('Root.Shop.Emails.Notification', $notificationFrom);
-    $fields->addFieldToTab('Root.Shop.Emails.Notification', new TextField('NotificationTo', _t('ShopSettings.TO', 'To')));
-    $fields->addFieldToTab('Root.Shop.Emails.Notification', new TextField('NotificationSubject', _t('ShopSettings.SUBJECT_LINE', 'Subject line')));
-    $fields->addFieldToTab('Root.Shop.Emails.Notification', new TextareaField('NotificationBody', _t('ShopSettings.MESSAGE', 'Message (order details are included in the email)'), 10));
+      $notificationFrom = new TextField('NotificationFrom', _t('ShopSettings.FROM', 'From'));
+      $notificationFrom->setValue(_t('ShopSettings.NOTIFICATION_FROM', 'Customer email address'));
+      $notificationFrom = $notificationFrom->performReadonlyTransformation();
+      $fields->addFieldToTab('Root.Shop.Emails.Notification', $notificationFrom);
+      $fields->addFieldToTab('Root.Shop.Emails.Notification', new TextField('NotificationTo', _t('ShopSettings.TO', 'To')));
+      $fields->addFieldToTab('Root.Shop.Emails.Notification', new TextField('NotificationSubject', _t('ShopSettings.SUBJECT_LINE', 'Subject line')));
+      $fields->addFieldToTab('Root.Shop.Emails.Notification', new TextareaField('NotificationBody', _t('ShopSettings.MESSAGE', 'Message (order details are included in the email)'), 10));
     
     //Shipping
     $fields->findOrMakeTabSet('Root.Shop.Shipping');
-    $fields->addFieldToTab("Root.Shop.Shipping", 
+      $fields->addFieldToTab("Root.Shop.Shipping",
       new Tab('Countries')
     );
-    $fields->addFieldToTab("Root.Shop.Shipping", 
+      $fields->addFieldToTab("Root.Shop.Shipping",
       new Tab('Regions')
     );
      
-    $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
-    $manager = new $managerClass(
+      $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
+      $manager = new $managerClass(
       $this->owner,
       'ShippingCountries',
       'Country_Shipping'
     );
-    $fields->addFieldToTab("Root.Shop.Shipping.Countries", $manager);
+      $fields->addFieldToTab("Root.Shop.Shipping.Countries", $manager);
     
-    $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
-    $manager = new $managerClass(
+      $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
+      $manager = new $managerClass(
       $this->owner,
       'ShippingRegions',
       'Region_Shipping'
     );
-    $fields->addFieldToTab("Root.Shop.Shipping.Regions", $manager);
+      $fields->addFieldToTab("Root.Shop.Shipping.Regions", $manager);
     
     
-    if (file_exists(BASE_PATH . '/swipestripe') && ShopSettings::get_license_key() == null) {
-      
-      $warning = _t('ShopSettings.LICENCE_WARNING','
+      if (file_exists(BASE_PATH . '/swipestripe') && ShopSettings::get_license_key() == null) {
+          $warning = _t('ShopSettings.LICENCE_WARNING', '
         Warning: You have SwipeStripe installed without a license key. 
         Please <a href="http://swipestripe.com" target="_blank">purchase a license key here</a> before this site goes live.
 			');
       
-			$fields->addFieldToTab("Root.Main", new LiteralField("SwipeStripeLicenseWarning", 
-				'<p class="message warning">'.$warning.'</p>'
-			), "Title");
-		}
-	}
+          $fields->addFieldToTab("Root.Main", new LiteralField("SwipeStripeLicenseWarning",
+                '<p class="message warning">'.$warning.'</p>'
+            ), "Title");
+      }
+  }
 }
 
 /**
@@ -180,42 +184,43 @@ class ShopSettings extends DataObjectDecorator {
  * @package swipestripe
  * @subpackage admin
  */
-class ShopSettings_Controller extends Page_Controller {
+class ShopSettings_Controller extends Page_Controller
+{
 
-  /**
+    /**
    * Output license keys in XML format
    * 
    * @see Page_Controller::init()
    */
-  public function init() {
-
-    $data = array();
-    $data['Key'] = ShopSettings::get_license_key();
+  public function init()
+  {
+      $data = array();
+      $data['Key'] = ShopSettings::get_license_key();
     
     //Find folders that start with swipestripe_, get their license keys
     $base = Director::baseFolder() . '/swipestripe_';
-    $dirs = glob($base . '*', GLOB_ONLYDIR);
-    $extensionLicenseKeys = ShopSettings::get_extension_license_keys();
+      $dirs = glob($base . '*', GLOB_ONLYDIR);
+      $extensionLicenseKeys = ShopSettings::get_extension_license_keys();
     
-    if ($dirs && is_array($dirs)) {
-      $data['Extensions'] = array();
-      foreach ($dirs as $dir) {
-        $extensionName = str_replace($base, '', $dir);
-        if ($extensionName){
-          $data['Extensions'][]['Extension'] = array(
-          	'Name' => $extensionName,
+      if ($dirs && is_array($dirs)) {
+          $data['Extensions'] = array();
+          foreach ($dirs as $dir) {
+              $extensionName = str_replace($base, '', $dir);
+              if ($extensionName) {
+                  $data['Extensions'][]['Extension'] = array(
+              'Name' => $extensionName,
             'Key' => $extensionLicenseKeys[$extensionName]
           );
-        } 
+              }
+          }
       }
-    }
 
-    $xml = new SimpleXMLElement("<?xml version=\"1.0\"?><SwipeStripe></SwipeStripe>");
-    $this->array_to_xml($data, $xml);
+      $xml = new SimpleXMLElement("<?xml version=\"1.0\"?><SwipeStripe></SwipeStripe>");
+      $this->array_to_xml($data, $xml);
     
-    header ("content-type: text/xml");
-    print $xml->asXML();
-    exit;
+      header("content-type: text/xml");
+      print $xml->asXML();
+      exit;
   }
   
   /**
@@ -224,20 +229,19 @@ class ShopSettings_Controller extends Page_Controller {
    * @param Array $data
    * @param SimpleXMLElement $xml
    */
-  public function array_to_xml($data, &$xml) {
-    foreach ($data as $key => $value) {
-      if (is_array($value)) {
-        if (!is_numeric($key)){
-          $subnode = $xml->addChild("$key");
-          self::array_to_xml($value, $subnode);
-        }
-        else{
-          self::array_to_xml($value, $xml);
-        }
+  public function array_to_xml($data, &$xml)
+  {
+      foreach ($data as $key => $value) {
+          if (is_array($value)) {
+              if (!is_numeric($key)) {
+                  $subnode = $xml->addChild("$key");
+                  self::array_to_xml($value, $subnode);
+              } else {
+                  self::array_to_xml($value, $xml);
+              }
+          } else {
+              $xml->addChild("$key", "$value");
+          }
       }
-      else {
-        $xml->addChild("$key","$value");
-      }
-    }
   }
 }

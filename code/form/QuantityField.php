@@ -7,34 +7,34 @@
  * @package swipestripe
  * @subpackage form
  */
-class QuantityField extends TextField {
-	
-  /**
+class QuantityField extends TextField
+{
+    
+    /**
    * Validate the quantity is above 0.
    * 
    * @see FormField::validate()
    * @return Boolean
    */
-  function validate($validator) {
+  public function validate($validator)
+  {
+      $valid = true;
+      $quantity = $this->Value();
+        
+      if ($quantity == null || !is_numeric($quantity) || $quantity <= 0) {
+          $errorMessage = _t('Form.ITEM_QUANTITY_INCORRECT', 'The quantity must be at least one (1).');
+          if ($msg = $this->getCustomValidationMessage()) {
+              $errorMessage = $msg;
+          }
+            
+          $validator->validationError(
+                $this->Name(),
+                $errorMessage,
+                "error"
+            );
+          $valid = false;
+      }
 
-	  $valid = true;
-		$quantity = $this->Value();
-		
-    if ($quantity == null || !is_numeric($quantity) || $quantity <= 0) {
-	    $errorMessage = _t('Form.ITEM_QUANTITY_INCORRECT', 'The quantity must be at least one (1).');
-			if ($msg = $this->getCustomValidationMessage()) {
-				$errorMessage = $msg;
-			}
-			
-			$validator->validationError(
-				$this->Name(),
-				$errorMessage,
-				"error"
-			);
-	    $valid = false;
-	  }
-
-	  return $valid;
-	}
-	
+      return $valid;
+  }
 }

@@ -7,35 +7,37 @@
  * @package swipestripe
  * @subpackage shipping
  */
-class FlatFeeShippingConfigDecorator extends DataObjectDecorator {
+class FlatFeeShippingConfigDecorator extends DataObjectDecorator
+{
 
-  /**
+    /**
    * Attach {@link FlatFeeShippingRate}s to {@link SiteConfig}.
    * 
    * @see DataObjectDecorator::extraStatics()
    */
-	function extraStatics() {
-		return array(
-			'has_many' => array(
-			  'FlatFeeShippingRates' => 'FlatFeeShippingRate'
-			)
-		);
-	}
+    public function extraStatics()
+    {
+        return array(
+            'has_many' => array(
+              'FlatFeeShippingRates' => 'FlatFeeShippingRate'
+            )
+        );
+    }
 
-	/**
-	 * Create {@link ComplexTableField} for managing {@link FlatFeeShippingRate}s.
-	 * 
-	 * @see DataObjectDecorator::updateCMSFields()
-	 */
-  function updateCMSFields(FieldSet &$fields) {
-
-    $fields->findOrMakeTabSet('Root.Shop.Shipping');
-    $fields->addFieldToTab("Root.Shop.Shipping", 
+    /**
+     * Create {@link ComplexTableField} for managing {@link FlatFeeShippingRate}s.
+     * 
+     * @see DataObjectDecorator::updateCMSFields()
+     */
+  public function updateCMSFields(FieldSet &$fields)
+  {
+      $fields->findOrMakeTabSet('Root.Shop.Shipping');
+      $fields->addFieldToTab("Root.Shop.Shipping",
       new Tab('FlatFeeShipping')
     );
      
-    $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
-    $flatFeeManager = new $managerClass(
+      $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
+      $flatFeeManager = new $managerClass(
       $this->owner,
       'FlatFeeShippingRates',
       'FlatFeeShippingRate',
@@ -47,7 +49,6 @@ class FlatFeeShippingConfigDecorator extends DataObjectDecorator {
       ),
       'getCMSFields_forPopup'
     );
-    $fields->addFieldToTab("Root.Shop.Shipping.FlatFeeShipping", $flatFeeManager);
-	}
-
+      $fields->addFieldToTab("Root.Shop.Shipping.FlatFeeShipping", $flatFeeManager);
+  }
 }

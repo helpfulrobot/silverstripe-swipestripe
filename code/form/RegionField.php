@@ -7,9 +7,10 @@
  * @package swipestripe
  * @subpackage form
  */
-class RegionField extends DropdownField {
+class RegionField extends DropdownField
+{
 
-  /**
+    /**
    * Create drop down field for a product option, just ensures name of field 
    * is in the format Options[OptionClassName].
    * 
@@ -20,23 +21,22 @@ class RegionField extends DropdownField {
    * @param Form $form
    * @param String $emptyString
    */
-	function __construct($name, $title = null, $source = array(), $value = "", $form = null, $emptyString = null) {
+    public function __construct($name, $title = null, $source = array(), $value = "", $form = null, $emptyString = null)
+    {
+        $this->addExtraClass('dropdown');
+        parent::__construct($name, $title, $source, $value, $form, $emptyString);
+    }
+    
+    public function FieldHolder()
+    {
+        $regions = Region::shipping_regions();
+        $jsonRegions = json_encode($regions);
 
-	  $this->addExtraClass('dropdown');
-		parent::__construct($name, $title, $source, $value, $form, $emptyString);
-	}
-	
-  function FieldHolder() {
-
-    $regions = Region::shipping_regions();
-    $jsonRegions = json_encode($regions);
-
-		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-		Requirements::javascriptTemplate('swipestripe/javascript/RegionField.js', array(
-		  "regions" => $jsonRegions,
-		  'defaultValue' => $this->Value()
-		));
-		return parent::FieldHolder();
-	}
-	
+        Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+        Requirements::javascriptTemplate('swipestripe/javascript/RegionField.js', array(
+          "regions" => $jsonRegions,
+          'defaultValue' => $this->Value()
+        ));
+        return parent::FieldHolder();
+    }
 }

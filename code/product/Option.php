@@ -10,9 +10,10 @@
  * @package swipestripe
  * @subpackage product
  */
-class Option extends DataObject {
+class Option extends DataObject
+{
 
-  /**
+    /**
    * DB fields for this Option
    * 
    * @var Array
@@ -37,7 +38,7 @@ class Option extends DataObject {
    * 
    * @var Array
    */
-  static $belongs_many_many = array(    
+  public static $belongs_many_many = array(
     'Variations' => 'Variation'
   );
   
@@ -46,11 +47,11 @@ class Option extends DataObject {
    * 
    * @return FieldSet
    */
-  public function getCMSFields_forPopup() {
-    return new FieldSet(
+  public function getCMSFields_forPopup()
+  {
+      return new FieldSet(
       new TextField('Title'),
       new TextareaField('Description')
     );
   }
-
 }

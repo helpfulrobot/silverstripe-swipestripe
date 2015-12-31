@@ -14,36 +14,38 @@
  * @package swipestripe
  * @subpackage tests
  */
-class ProductCategoryTest extends SWSTest {
-	
-  function setUp() {
-		parent::setUp();
-		
-		$category = $this->objFromFixture('ProductCategory', 'general');
-		$this->assertTrue(is_numeric($category->ID));
-	}
-
-	function testProductCategoryProducts() {
-	  $category = $this->objFromFixture('ProductCategory', 'general');
-	  $productA = $this->objFromFixture('Product', 'productA');
-	  $productB = $this->objFromFixture('Product', 'productB');
-	  
-	  $this->loginAs('admin');
-	  $category->doPublish();
-	  $productA->doPublish();
-	  $productB->doPublish();
-	  $this->logOut();
-
-    $this->assertEquals(2, $category->Products()->count());
+class ProductCategoryTest extends SWSTest
+{
     
-    $doSet = DataObject::get( 
-       'Product', 
-       "\"ProductCategory_Products\".\"ProductCategoryID\" = '".$category->ID."' OR \"ParentID\" = '".$category->ID."'", 
-       "Created DESC", 
+    public function setUp()
+    {
+        parent::setUp();
+        
+        $category = $this->objFromFixture('ProductCategory', 'general');
+        $this->assertTrue(is_numeric($category->ID));
+    }
+
+    public function testProductCategoryProducts()
+    {
+        $category = $this->objFromFixture('ProductCategory', 'general');
+        $productA = $this->objFromFixture('Product', 'productA');
+        $productB = $this->objFromFixture('Product', 'productB');
+      
+        $this->loginAs('admin');
+        $category->doPublish();
+        $productA->doPublish();
+        $productB->doPublish();
+        $this->logOut();
+
+        $this->assertEquals(2, $category->Products()->count());
+    
+        $doSet = DataObject::get(
+       'Product',
+       "\"ProductCategory_Products\".\"ProductCategoryID\" = '".$category->ID."' OR \"ParentID\" = '".$category->ID."'",
+       "Created DESC",
        "LEFT JOIN \"ProductCategory_Products\" ON \"ProductCategory_Products\".\"ProductID\" = \"Product\".\"ID\"",
        "0, 3"
     );
-    $this->assertEquals(2, $doSet->count());
-	}
-	
+        $this->assertEquals(2, $doSet->count());
+    }
 }

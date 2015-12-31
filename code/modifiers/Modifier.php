@@ -13,52 +13,55 @@
  * @package swipestripe
  * @subpackage modifiers
  */
-class Modifier extends DataObject {
-	
-  /**
+class Modifier extends DataObject
+{
+    
+    /**
    * Methods supported, array of class names of classes that extend Modifier
    * and have been enabled, e.g: FlatFeeShipping
    * 
    * @var Array
    */
-	public static $supported_methods = array(
-	);
-	
-	/**
-	 * Get all the form fields from all the supported methods.
-	 * 
-	 * @see Modifier::$supported_methods
-	 * @param Order $order
-	 * @return FieldSet
-	 */
-	static function combined_form_fields($order) {
-	  $fields = new FieldSet();
-	  
-	  foreach (self::$supported_methods as $modifierClassName) {
-	    
-	    $modifier = new $modifierClassName();
-	    $modifierFields = $modifier->getFormFields($order);
-	    
-	    if ($modifierFields && $modifierFields->exists()) foreach ($modifierFields as $field) {
-	      $fields->push($field);
-	    } 
-	  }
-	  return $fields;
-	}
-	
-	/**
-	 * Get all the form requirements from all the supported methods.
-	 * 
-	 * //TODO is this really needed? all modifier fields go into Validation as required to perform validation on
-	 * 
-	 * @see Modifier::$supported_methods
-	 * @param unknown_type $order
-	 * @return FieldSet
-	 */
-  static function combined_form_requirements($order) {
-	  return new FieldSet();
-	}
-	
+    public static $supported_methods = array(
+    );
+    
+    /**
+     * Get all the form fields from all the supported methods.
+     * 
+     * @see Modifier::$supported_methods
+     * @param Order $order
+     * @return FieldSet
+     */
+    public static function combined_form_fields($order)
+    {
+        $fields = new FieldSet();
+      
+        foreach (self::$supported_methods as $modifierClassName) {
+            $modifier = new $modifierClassName();
+            $modifierFields = $modifier->getFormFields($order);
+        
+            if ($modifierFields && $modifierFields->exists()) {
+                foreach ($modifierFields as $field) {
+                    $fields->push($field);
+                }
+            }
+        }
+        return $fields;
+    }
+    
+    /**
+     * Get all the form requirements from all the supported methods.
+     * 
+     * //TODO is this really needed? all modifier fields go into Validation as required to perform validation on
+     * 
+     * @see Modifier::$supported_methods
+     * @param unknown_type $order
+     * @return FieldSet
+     */
+  public static function combined_form_requirements($order)
+  {
+      return new FieldSet();
+  }
 }
 
 /**
@@ -70,9 +73,10 @@ class Modifier extends DataObject {
  * @package swipestripe
  * @subpackage modifiers
  */
-interface Modifier_Interface {
+interface Modifier_Interface
+{
 
-  /**
+    /**
    * Get form fields for this modifier.
    * 
    * @see Modifier::combined_form_fields()

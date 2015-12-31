@@ -13,9 +13,10 @@
  * @package swipestripe
  * @subpackage form
  */
-class StockField extends FormField {
+class StockField extends FormField
+{
   
-  /**
+    /**
    * Template filename
    * 
    * @var String
@@ -46,95 +47,97 @@ class StockField extends FormField {
    * @param String $maxLength
    * @param String $form
    */
-  function __construct($name, $title = null, $value = "", $object, $maxLength = null, $form = null) {
-
-    $quantity = $object->getUnprocessedQuantity();
-    $cartQuantity = $quantity['InCarts'];
-    $orderQuantity = $quantity['InOrders'];
-    $label = sprintf(_t('StockField', 'Stock : %s are currently in shopping carts, %s in orders that have not been dispatched.'), $cartQuantity, $orderQuantity);
+  public function __construct($name, $title = null, $value = "", $object, $maxLength = null, $form = null)
+  {
+      $quantity = $object->getUnprocessedQuantity();
+      $cartQuantity = $quantity['InCarts'];
+      $orderQuantity = $quantity['InOrders'];
+      $label = sprintf(_t('StockField', 'Stock : %s are currently in shopping carts, %s in orders that have not been dispatched.'), $cartQuantity, $orderQuantity);
     
-    $stockChoiceField = new OptionsetField('StockChoice', $label, array(
-		  0 => _t('StockField.UNLIMITED',"Unlimited"),
-		  1 => _t('StockField.SPECIFYSTOCK',"Specify Stock")
-		));
-    $this->stockChoiceField = $stockChoiceField;
+      $stockChoiceField = new OptionsetField('StockChoice', $label, array(
+          0 => _t('StockField.UNLIMITED', "Unlimited"),
+          1 => _t('StockField.SPECIFYSTOCK', "Specify Stock")
+        ));
+      $this->stockChoiceField = $stockChoiceField;
     
-    $stockField = new NumericField('Stock', '', $value, $maxLength, $form);
-    $this->stockLevelField = $stockField;
+      $stockField = new NumericField('Stock', '', $value, $maxLength, $form);
+      $this->stockLevelField = $stockField;
     
-    parent::__construct($name, $title, $value, $form);
-	}
-	
-	/**
-	 * Create the field for display in CMS.
-	 * 
-	 * (non-PHPdoc)
-	 * @see FormField::Field()
-	 * @return String
-	 */
-  function Field() {
-
-    $this->stockLevelField->setForm($this->form);
+      parent::__construct($name, $title, $value, $form);
+  }
     
-    if ($this->value == -1) {
-	    $this->stockLevelField->addExtraClass('HiddenStock');
-	  }
-	  return $this->stockLevelField->SmallFieldHolder();
-	}
-	
-	/**
-	 * Retrieve the {@link OptionsetField} for stock choice for display in CMS.
-	 * 
-	 * @return String
-	 */
-	function StockChoiceField() {
-
-    $stockChoiceValue = ($this->value == -1) ? 0 : 1;
-    $this->stockChoiceField->setValue($stockChoiceValue);
-	  return $this->stockChoiceField->SmallFieldHolder();
-	}
-	
-	/**
-	 * Render the fields and include javascript.
-	 * 
-	 * (non-PHPdoc)
-	 * @see FormField::FieldHolder()
-	 * @return String
-	 */
-  function FieldHolder() {
+    /**
+     * Create the field for display in CMS.
+     * 
+     * (non-PHPdoc)
+     * @see FormField::Field()
+     * @return String
+     */
+  public function Field()
+  {
+      $this->stockLevelField->setForm($this->form);
     
-    Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-		Requirements::javascript('swipestripe/javascript/StockField.js');
-		Requirements::customCSS('.HiddenStock{display:none;}');
-		return $this->renderWith($this->template);
-	}
-	
-	/**
-	 * Set value of the {@link NumericField} because that is the actual value 
-	 * of the stock level. If unlimited stock is selected the value is -1.
-	 * 
-	 * (non-PHPdoc)
-	 * @see FormField::setValue()
-	 * @return StockField
-	 */
-  function setValue($value) {
-		$this->value = $value; 
-		$this->stockLevelField->setValue($value);
-		return $this;
-	}
-	
-	/**
-	 * Get the value of the stock level
-	 * 
-	 * (non-PHPdoc)
-	 * @see FormField::Value()
-	 * @return Int
-	 */
-	function Value() {
-	  return $this->value;
-	  return $this->stockLevelField->Value();
-	}
-	
+      if ($this->value == -1) {
+          $this->stockLevelField->addExtraClass('HiddenStock');
+      }
+      return $this->stockLevelField->SmallFieldHolder();
+  }
+    
+    /**
+     * Retrieve the {@link OptionsetField} for stock choice for display in CMS.
+     * 
+     * @return String
+     */
+    public function StockChoiceField()
+    {
+        $stockChoiceValue = ($this->value == -1) ? 0 : 1;
+        $this->stockChoiceField->setValue($stockChoiceValue);
+        return $this->stockChoiceField->SmallFieldHolder();
+    }
+    
+    /**
+     * Render the fields and include javascript.
+     * 
+     * (non-PHPdoc)
+     * @see FormField::FieldHolder()
+     * @return String
+     */
+  public function FieldHolder()
+  {
+      Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+      Requirements::javascript('swipestripe/javascript/StockField.js');
+      Requirements::customCSS('.HiddenStock{display:none;}');
+      return $this->renderWith($this->template);
+  }
+    
+    /**
+     * Set value of the {@link NumericField} because that is the actual value 
+     * of the stock level. If unlimited stock is selected the value is -1.
+     * 
+     * (non-PHPdoc)
+     * @see FormField::setValue()
+     * @return StockField
+     */
+  public function setValue($value)
+  {
+      $this->value = $value;
+      $this->stockLevelField->setValue($value);
+      return $this;
+  }
+    
+    /**
+     * Get the value of the stock level
+     * 
+     * (non-PHPdoc)
+     * @see FormField::Value()
+     * @return Int
+     */
+    public function Value()
+    {
+        return $this->value;
+        return $this->stockLevelField->Value();
+    }
+    
   /**
    * Validate that the stock level is numeric and greater than -2.
    * -1 represents unlimited stock.
@@ -142,41 +145,40 @@ class StockField extends FormField {
    * @see FormField::validate()
    * @return Boolean
    */
-  function validate($validator) {
+  public function validate($validator)
+  {
 
     //PHP validation does not seem to work for form fields in the CMS
-	  $valid = true;
-	  return $valid;
-	  
-    if (isset($this->value) && !is_numeric(trim($this->value))){
+      $valid = true;
+      return $valid;
       
-      $errorMessage = _t('Form.STOCK_LEVEL_NOT_NUMERIC', 'This stock value is not a number.');
-  		if ($msg = $this->getCustomValidationMessage()) {
-  			$errorMessage = $msg;
-  		}
+      if (isset($this->value) && !is_numeric(trim($this->value))) {
+          $errorMessage = _t('Form.STOCK_LEVEL_NOT_NUMERIC', 'This stock value is not a number.');
+          if ($msg = $this->getCustomValidationMessage()) {
+              $errorMessage = $msg;
+          }
       
-      $validator->validationError(
-  			$this->Name(),
-  			$errorMessage,
-  			"error"
-  		);
-  		$valid = false;
-		} 
-		
-		if (isset($this->value) && is_numeric($this->value) && $this->value < -1) {
-		  
-		  $errorMessage = _t('Form.STOCK_LEVEL_NOT_NUMERIC', 'This stock value is incorrect.');
-  		if ($msg = $this->getCustomValidationMessage()) {
-  			$errorMessage = $msg;
-  		}
+          $validator->validationError(
+            $this->Name(),
+            $errorMessage,
+            "error"
+        );
+          $valid = false;
+      }
+        
+      if (isset($this->value) && is_numeric($this->value) && $this->value < -1) {
+          $errorMessage = _t('Form.STOCK_LEVEL_NOT_NUMERIC', 'This stock value is incorrect.');
+          if ($msg = $this->getCustomValidationMessage()) {
+              $errorMessage = $msg;
+          }
       
-      $validator->validationError(
-  			$this->Name(),
-  			$errorMessage,
-  			"error"
-  		);
-  		$valid = false;
-		}
-	  return $valid;
-	}
+          $validator->validationError(
+            $this->Name(),
+            $errorMessage,
+            "error"
+        );
+          $valid = false;
+      }
+      return $valid;
+  }
 }

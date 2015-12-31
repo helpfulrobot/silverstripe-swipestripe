@@ -12,9 +12,10 @@
  * @package swipestripe
  * @subpackage product
  */
-class Attribute extends DataObject {
+class Attribute extends DataObject
+{
 
-  /**
+    /**
    * DB fields for the Attribute, Title acts as the label for the select field on the 
    * AddToCartForm - so it does not need to be unique.
    * 
@@ -41,7 +42,7 @@ class Attribute extends DataObject {
    * 
    * @var Array
    */
-  static $belongs_many_many = array(    
+  public static $belongs_many_many = array(
     'Products' => 'Product'
   );
   
@@ -51,51 +52,52 @@ class Attribute extends DataObject {
    * @var Array
    */
   public static $searchable_fields = array(
-	  'Title'
-	);
-	
-	/**
+      'Title'
+    );
+    
+    /**
    * Summary fields for Attributes
    * 
    * @var Array
    */
   public static $summary_fields = array(
-	  'Title',
+      'Title',
     'Label',
     'Description'
-	);
+    );
   
-	/**
-	 * Add some fields to the CMS for managing Attributes.
-	 * 
-	 * @see DataObject::getCMSFields()
-	 * @return FieldSet
-	 */
-  function getCMSFields() {
-    $fields = parent::getCMSFields();
-    $fields->removeByName('Products');
-    $fields->removeByName('Options');
+    /**
+     * Add some fields to the CMS for managing Attributes.
+     * 
+     * @see DataObject::getCMSFields()
+     * @return FieldSet
+     */
+  public function getCMSFields()
+  {
+      $fields = parent::getCMSFields();
+      $fields->removeByName('Products');
+      $fields->removeByName('Options');
     
-    $fields->replaceField('Title', new TextField('Title', 'Short descriptive title'));
-    $fields->replaceField('Label', new TextField('Label', 'Label for dropdown on the product page'));
+      $fields->replaceField('Title', new TextField('Title', 'Short descriptive title'));
+      $fields->replaceField('Label', new TextField('Label', 'Label for dropdown on the product page'));
     
     //Add a manager for options
     $manager = new ComplexTableField(
-      $this, 
-      'Options', 
+      $this,
+      'Options',
       'Option',
       array(
         'Title' => 'Title'
-      ), 
+      ),
       'getCMSFields_forPopup',
       'ProductID = 0'
     );
-    $fields->addFieldToTab("Root.DefaultOptions", $manager);
+      $fields->addFieldToTab("Root.DefaultOptions", $manager);
     
     //Ability to edit fields added to CMS here
-		$this->extend('updateAttributeCMSFields', $fields);
+        $this->extend('updateAttributeCMSFields', $fields);
     
-    return $fields;
+      return $fields;
   }
   
   /**
@@ -104,8 +106,8 @@ class Attribute extends DataObject {
    * @see AttributeValidator
    * @return AttributeValidator
    */
-  public function getCMSValidator() { 
-    return new AttributeValidator('Title', 'Label'); 
+  public function getCMSValidator()
+  {
+      return new AttributeValidator('Title', 'Label');
   }
-
 }

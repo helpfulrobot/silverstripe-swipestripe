@@ -7,38 +7,41 @@
  * @package swipestripe
  * @subpackage shipping
  */
-class FlatFeeTaxConfigDecorator extends DataObjectDecorator {
+class FlatFeeTaxConfigDecorator extends DataObjectDecorator
+{
 
-  /**
+    /**
    * Attach {@link FlatFeeTaxRate}s to {@link SiteConfig}.
    * 
    * @see DataObjectDecorator::extraStatics()
    */
-	function extraStatics() {
-		return array(
-			'has_many' => array(
-			  'FlatFeeTaxRates' => 'FlatFeeTaxRate'
-			)
-		);
-	}
+    public function extraStatics()
+    {
+        return array(
+            'has_many' => array(
+              'FlatFeeTaxRates' => 'FlatFeeTaxRate'
+            )
+        );
+    }
 
-	/**
-	 * Create {@link ComplexTableField} for managing {@link FlatFeeTaxRate}s.
-	 * 
-	 * @see DataObjectDecorator::updateCMSFields()
-	 */
-  function updateCMSFields(FieldSet &$fields) {
+    /**
+     * Create {@link ComplexTableField} for managing {@link FlatFeeTaxRate}s.
+     * 
+     * @see DataObjectDecorator::updateCMSFields()
+     */
+  public function updateCMSFields(FieldSet &$fields)
+  {
 
     //$fields->addFieldToTab("Root", new TabSet('Shop')); 
-    $fields->addFieldToTab("Root.Shop", 
+    $fields->addFieldToTab("Root.Shop",
       new TabSet('Tax')
     );
-    $fields->addFieldToTab("Root.Shop.Tax", 
+      $fields->addFieldToTab("Root.Shop.Tax",
       new Tab('FlatFeeTax')
     );
     
-    $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
-    $flatFeeManager = new $managerClass(
+      $managerClass = (class_exists('DataObjectManager')) ? 'DataObjectManager' : 'ComplexTableField';
+      $flatFeeManager = new $managerClass(
       $this->owner,
       'FlatFeeTaxRates',
       'FlatFeeTaxRate',
@@ -50,7 +53,6 @@ class FlatFeeTaxConfigDecorator extends DataObjectDecorator {
       ),
       'getCMSFields_forPopup'
     );
-    $fields->addFieldToTab("Root.Shop.Tax.FlatFeeTax", $flatFeeManager);
-	}
-
+      $fields->addFieldToTab("Root.Shop.Tax.FlatFeeTax", $flatFeeManager);
+  }
 }

@@ -8,9 +8,10 @@
  * @package swipestripe
  * @subpackage shipping
  */
-class FlatFeeTaxRate extends DataObject {
+class FlatFeeTaxRate extends DataObject
+{
   
-  /**
+    /**
    * Fields for this tax rate
    * 
    * @var Array
@@ -20,40 +21,40 @@ class FlatFeeTaxRate extends DataObject {
     'Description' => 'Varchar',
     //'Amount' => 'Money',
     //'CountryCode' => 'Varchar(2)', //Two letter country codes for ISO 3166-1 alpha-2
-  	'Rate' => 'Decimal(18,2)'
-	);
-	
-	/**
-	 * Tax rates are associated with SiteConfigs.
-	 * 
-	 * TODO The CTF in SiteConfig does not save the SiteConfig ID correctly so this is moot
-	 * 
-	 * @var unknown_type
-	 */
-	static $has_one = array (
+    'Rate' => 'Decimal(18,2)'
+    );
+    
+    /**
+     * Tax rates are associated with SiteConfigs.
+     * 
+     * TODO The CTF in SiteConfig does not save the SiteConfig ID correctly so this is moot
+     * 
+     * @var unknown_type
+     */
+    public static $has_one = array(
     'SiteConfig' => 'SiteConfig',
-	  'Country' => 'Country_Shipping'
+      'Country' => 'Country_Shipping'
   );
-	
+    
   /**
    * Field for editing a {@link FlatFeeTaxRate}.
    * 
    * @return FieldSet
    */
-  public function getCMSFields_forPopup() {
+  public function getCMSFields_forPopup()
+  {
+      $fields = new FieldSet();
+    
+      $fields->push(new TextField('Title', _t('FlatFeeTaxRate.LABEL', 'Label')));
+      $fields->push(new TextField('Description', _t('FlatFeeTaxRate.DESCRIPTION', 'Description')));
+    
+      $countryField = new DropdownField('CountryID', _t('FlatFeeTaxRate.COUNTRY', 'Country'), Country::shipping_countries());
+      $fields->push($countryField);
+    
+      $rateField = new NumericField('Rate', _t('FlatFeeTaxRate.TAX_RATE', 'Tax rate as a percentage'));
+      $fields->push($rateField);
 
-    $fields = new FieldSet();
-    
-    $fields->push(new TextField('Title', _t('FlatFeeTaxRate.LABEL', 'Label')));
-    $fields->push(new TextField('Description', _t('FlatFeeTaxRate.DESCRIPTION', 'Description')));
-    
-    $countryField = new DropdownField('CountryID', _t('FlatFeeTaxRate.COUNTRY', 'Country'), Country::shipping_countries());
-    $fields->push($countryField);
-    
-    $rateField = new NumericField('Rate', _t('FlatFeeTaxRate.TAX_RATE', 'Tax rate as a percentage'));
-    $fields->push($rateField);
-
-    return $fields;
+      return $fields;
   }
   
   /**
@@ -62,8 +63,9 @@ class FlatFeeTaxRate extends DataObject {
    * @see FlatFeeTaxField
    * @return String
    */
-  public function Label() {
-    return $this->Title . ' ' . $this->SummaryOfRate();
+  public function Label()
+  {
+      return $this->Title . ' ' . $this->SummaryOfRate();
   }
   
   /**
@@ -71,8 +73,8 @@ class FlatFeeTaxRate extends DataObject {
    * 
    * @return String
    */
-  public function SummaryOfRate() {
-    return $this->Rate . ' %';
+  public function SummaryOfRate()
+  {
+      return $this->Rate . ' %';
   }
-	
 }

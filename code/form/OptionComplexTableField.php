@@ -8,9 +8,10 @@
  * @package swipestripe
  * @subpackage form
  */
-class OptionComplexTableField extends ComplexTableField {
+class OptionComplexTableField extends ComplexTableField
+{
   
-  /**
+    /**
    * {@link Attribute} ID for this options
    * 
    * @var Int
@@ -22,25 +23,25 @@ class OptionComplexTableField extends ComplexTableField {
    * 
    * @param Int $id
    */
-	function setAttributeID($id) {
-		$this->attributeID = $id;
-	}
-	
-	/**
-	 * Ensure the fields on the add and edit forms for each option have the correct
-	 * {@link Attribute} ID set.
-	 * 
-	 * @see ComplexTableField::getFieldsFor()
-	 * @return FieldSet
-	 */
-  function getFieldsFor($childData) {
-		
-		$detailFields = parent::getFieldsFor($childData);
-		
-		$detailFields->removeByName('AttributeID');
-		$detailFields->push(new HiddenField('AttributeID', '', $this->attributeID));
-		
-		return $detailFields;
-	}
-	
+    public function setAttributeID($id)
+    {
+        $this->attributeID = $id;
+    }
+    
+    /**
+     * Ensure the fields on the add and edit forms for each option have the correct
+     * {@link Attribute} ID set.
+     * 
+     * @see ComplexTableField::getFieldsFor()
+     * @return FieldSet
+     */
+  public function getFieldsFor($childData)
+  {
+      $detailFields = parent::getFieldsFor($childData);
+        
+      $detailFields->removeByName('AttributeID');
+      $detailFields->push(new HiddenField('AttributeID', '', $this->attributeID));
+        
+      return $detailFields;
+  }
 }

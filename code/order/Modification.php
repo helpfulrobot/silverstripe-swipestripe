@@ -11,74 +11,77 @@
  * @package swipestripe
  * @subpackage order
  */
-class Modification extends DataObject {
+class Modification extends DataObject
+{
 
-  /**
+    /**
    * DB fields for the order Modification, the actual {@link Modifier} data is saved into
    * this class so if a modifier is deleted the order still has the necessary 
    * details.
    * 
    * @var Array
    */
-	public static $db = array(
-	  'ModifierClass' => 'Varchar',
-		'ModifierOptionID' => 'Int', 
-	  'Amount' => 'Money',
-	  'Description' => 'Text',
-	  'SubTotalModifier' => 'Boolean'
-	);
+    public static $db = array(
+      'ModifierClass' => 'Varchar',
+        'ModifierOptionID' => 'Int',
+      'Amount' => 'Money',
+      'Description' => 'Text',
+      'SubTotalModifier' => 'Boolean'
+    );
 
-	/**
-	 * Relations for this class
-	 * 
-	 * @var Array
-	 */
-	public static $has_one = array(
-	  'Order' => 'Order'
-	);
-	
-	/**
-	 * Modifier currency
-	 * TODO move currency to one central location
-	 * 
-	 * @var String 3 letter ISO 4217 currency code e.g. "NZD"
-	 */
-	protected static $currency = 'NZD';
-	
-	/**
-	 * Set table to InnoDB in preparation for transaction support.
-	 * 
-	 * @var Array
-	 */
-	static $create_table_options = array(
-		'MySQLDatabase' => 'ENGINE=InnoDB'
-	);
-	
-	/**
-	 * Set the currency code that this site uses for Order Modifications
-	 * 
-	 * @param string $currency 3 letter ISO 4217 currency code e.g. "NZD"
-	 */
-	public static function set_currency($currency) {
-		self::$currency = $currency;
-	}
-	
-	/**
-	 * Return the currency set for Order Modifications
-	 * 
-	 * @return string 3 letter ISO 4217 currency code e.g. "NZD"
-	 */
-	public static function currency() {
-		return self::$currency;
-	}
-	
-	/**
-	 * By default Modifications are valid
-	 * 
-	 * @see DataObject::validate()
-	 */
-	function validate() {
-	  return parent::validate();
-	}
-	
+    /**
+     * Relations for this class
+     * 
+     * @var Array
+     */
+    public static $has_one = array(
+      'Order' => 'Order'
+    );
+    
+    /**
+     * Modifier currency
+     * TODO move currency to one central location
+     * 
+     * @var String 3 letter ISO 4217 currency code e.g. "NZD"
+     */
+    protected static $currency = 'NZD';
+    
+    /**
+     * Set table to InnoDB in preparation for transaction support.
+     * 
+     * @var Array
+     */
+    public static $create_table_options = array(
+        'MySQLDatabase' => 'ENGINE=InnoDB'
+    );
+    
+    /**
+     * Set the currency code that this site uses for Order Modifications
+     * 
+     * @param string $currency 3 letter ISO 4217 currency code e.g. "NZD"
+     */
+    public static function set_currency($currency)
+    {
+        self::$currency = $currency;
+    }
+    
+    /**
+     * Return the currency set for Order Modifications
+     * 
+     * @return string 3 letter ISO 4217 currency code e.g. "NZD"
+     */
+    public static function currency()
+    {
+        return self::$currency;
+    }
+    
+    /**
+     * By default Modifications are valid
+     * 
+     * @see DataObject::validate()
+     */
+    public function validate()
+    {
+        return parent::validate();
+    }
 }

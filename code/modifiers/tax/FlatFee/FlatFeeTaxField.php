@@ -7,14 +7,15 @@
  * @package swipestripe
  * @subpackage shipping
  */
-class FlatFeeTaxField extends ModifierHiddenField {
-	
-  /**
+class FlatFeeTaxField extends ModifierHiddenField
+{
+    
+    /**
    * The amount this field represents e.g: 15% * order subtotal
    * 
    * @var Money
    */
-	protected $amount;
+    protected $amount;
 
   /**
    * Render field with the appropriate template.
@@ -22,10 +23,11 @@ class FlatFeeTaxField extends ModifierHiddenField {
    * @see FormField::FieldHolder()
    * @return String
    */
-  function FieldHolder() {
-    Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-    Requirements::javascript('swipestripe/javascript/FlatFeeTaxField.js');
-    return $this->renderWith($this->template);
+  public function FieldHolder()
+  {
+      Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+      Requirements::javascript('swipestripe/javascript/FlatFeeTaxField.js');
+      return $this->renderWith($this->template);
   }
 
   /**
@@ -35,8 +37,9 @@ class FlatFeeTaxField extends ModifierHiddenField {
    * 
    * @param Order $order
    */
-  function updateValue($order) {
-    return;
+  public function updateValue($order)
+  {
+      return;
   }
 
   /**
@@ -46,11 +49,10 @@ class FlatFeeTaxField extends ModifierHiddenField {
    * 
    * @see ModifierSetField::validate()
    */
-  function validate($validator){
-
-    $valid = true;
-    return $valid;
-
+  public function validate($validator)
+  {
+      $valid = true;
+      return $valid;
   }
   
   /**
@@ -58,8 +60,9 @@ class FlatFeeTaxField extends ModifierHiddenField {
    * 
    * @param Money $amount
    */
-  function setAmount(Money $amount) {
-    $this->amount = $amount;
+  public function setAmount(Money $amount)
+  {
+      $this->amount = $amount;
   }
   
   /**
@@ -67,7 +70,8 @@ class FlatFeeTaxField extends ModifierHiddenField {
    * 
    * @return String
    */
-  function Description() {
-    return $this->amount->Nice();
+  public function Description()
+  {
+      return $this->amount->Nice();
   }
 }

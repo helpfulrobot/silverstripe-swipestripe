@@ -7,9 +7,10 @@
  * @package swipestripe
  * @subpackage form
  */
-class CartForm extends Form {
+class CartForm extends Form
+{
   
-  /**
+    /**
    * The current {@link Order} (cart).
    * 
    * @var Order
@@ -26,11 +27,11 @@ class CartForm extends Form {
    * @param Validator $validator
    * @param Order $currentOrder
    */
-  function __construct($controller, $name, FieldSet $fields, FieldSet $actions, $validator = null, Order $currentOrder = null) {
-    
-		parent::__construct($controller, $name, $fields, $actions, $validator);
-		$this->setTemplate('CartForm');
-		$this->currentOrder = $currentOrder;
+  public function __construct($controller, $name, FieldSet $fields, FieldSet $actions, $validator = null, Order $currentOrder = null)
+  {
+      parent::__construct($controller, $name, $fields, $actions, $validator);
+      $this->setTemplate('CartForm');
+      $this->currentOrder = $currentOrder;
   }
   
   /*
@@ -38,8 +39,8 @@ class CartForm extends Form {
    * 
    * @return Order The current order (cart)
    */
-  function Cart() {
-    return $this->currentOrder;
+  public function Cart()
+  {
+      return $this->currentOrder;
   }
-
 }

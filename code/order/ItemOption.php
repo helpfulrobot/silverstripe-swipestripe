@@ -7,67 +7,70 @@
  * @package swipestripe
  * @subpackage order
  */
-class ItemOption extends DataObject {
+class ItemOption extends DataObject
+{
 
-  /**
+    /**
    * DB fields for this class
    * 
    * @var Array
    */
-	public static $db = array(
-	  'ObjectID' => 'Int',
-	  'ObjectClass' => 'Varchar',
-	  'ObjectVersion' => 'Int',
-	  'Amount' => 'Money'
-	);
+    public static $db = array(
+      'ObjectID' => 'Int',
+      'ObjectClass' => 'Varchar',
+      'ObjectVersion' => 'Int',
+      'Amount' => 'Money'
+    );
 
-	/**
-	 * Relations for this class
-	 * 
-	 * @var Array
-	 */
-	public static $has_one = array(
-	  'Item' => 'Item'
-	);
-	
-	/**
-	 * Set table type to InnoDB to support transactions which are not currently implemented.
-	 * 
-	 * @var Array
-	 */
-	static $create_table_options = array(
-		'MySQLDatabase' => 'ENGINE=InnoDB'
-	);
-	
-	/**
-	 * Retrieve the object this item represents, usually a {@link Variation}.
-	 * Uses the object version so that the correct object details such as price are
-	 * retrieved.
-	 * 
-	 * @return DataObject 
-	 */
-	function Object() {
-	  return Versioned::get_version($this->ObjectClass, $this->ObjectID, $this->ObjectVersion);
-	}
-	
-	/**
-	 * By default all ItemOptions are valid.
-	 * 
-	 * @see DataObject::validate()
-	 */
-	function validate() {
-	  return parent::validate();
-	}
+    /**
+     * Relations for this class
+     * 
+     * @var Array
+     */
+    public static $has_one = array(
+      'Item' => 'Item'
+    );
+    
+    /**
+     * Set table type to InnoDB to support transactions which are not currently implemented.
+     * 
+     * @var Array
+     */
+    public static $create_table_options = array(
+        'MySQLDatabase' => 'ENGINE=InnoDB'
+    );
+    
+    /**
+     * Retrieve the object this item represents, usually a {@link Variation}.
+     * Uses the object version so that the correct object details such as price are
+     * retrieved.
+     * 
+     * @return DataObject 
+     */
+    public function Object()
+    {
+        return Versioned::get_version($this->ObjectClass, $this->ObjectID, $this->ObjectVersion);
+    }
+    
+    /**
+     * By default all ItemOptions are valid.
+     * 
+     * @see DataObject::validate()
+     */
+    public function validate()
+    {
+        return parent::validate();
+    }
 
-  public function onAfterWrite() {
+    public function onAfterWrite()
+    {
     
     //Update stock levels if a variation is being saved here
     parent::onAfterWrite();
-    $item = $this->Item();
-    $variation = $this->Object();
-	  if ($variation && $variation->exists() && $variation instanceof Variation) {
-	    $item->updateStockLevels();
-	  }
-	}
-
+        $item = $this->Item();
+        $variation = $this->Object();
+        if ($variation && $variation->exists() && $variation instanceof Variation) {
+            $item->updateStockLevels();
+        }
+    }
 }

@@ -7,14 +7,15 @@
  * @package swipestripe
  * @subpackage product
  */
-class ProductImage extends DataObject {
+class ProductImage extends DataObject
+{
   
-  /**
+    /**
    * DB fields for the ProductImage
    * 
    * @var Array
    */
-  static $db = array (
+  public static $db = array(
     'Caption' => 'Text'
   );
 
@@ -23,7 +24,7 @@ class ProductImage extends DataObject {
    * 
    * @var Array
    */
-  static $has_one = array (
+  public static $has_one = array(
     'Image' => 'Image',
     'Product' => 'Product'
   );
@@ -33,15 +34,15 @@ class ProductImage extends DataObject {
    * 
    * @return FieldSet
    */
-  public function getCMSFields_forPopup() {
-    
-    $fields = new FieldSet();
-    $fields->push(new TextareaField('Caption'));
+  public function getCMSFields_forPopup()
+  {
+      $fields = new FieldSet();
+      $fields->push(new TextareaField('Caption'));
 
-    $imageUploadField = (class_exists('ImageUploadField')) ? new ImageUploadField('Image') : new FileIFrameField('Image');
-    $fields->push($imageUploadField);
+      $imageUploadField = (class_exists('ImageUploadField')) ? new ImageUploadField('Image') : new FileIFrameField('Image');
+      $fields->push($imageUploadField);
     
-    return $fields;
+      return $fields;
   }
   
   /**
@@ -49,9 +50,13 @@ class ProductImage extends DataObject {
    * 
    * @return Image|String If no image can be found returns '(No Image)'
    */
-  function SummaryOfImage() {
-    if ($Image = $this->Image()) return $Image->CMSThumbnail();
-    else return '(No Image)';
+  public function SummaryOfImage()
+  {
+      if ($Image = $this->Image()) {
+          return $Image->CMSThumbnail();
+      } else {
+          return '(No Image)';
+      }
   }
   
   /**
@@ -59,9 +64,10 @@ class ProductImage extends DataObject {
    * 
    * @return Image|String If no image can be found returns '(No Image)'
    */
-  function fortemplate() {
-    $image = $this->Image();
-    $thumb = ($image && $image->exists()) ? $image->CroppedImage(40,40) : null;
-    return ($thumb && $thumb->exists()) ? $thumb->forTemplate() : '(No Image)';
+  public function fortemplate()
+  {
+      $image = $this->Image();
+      $thumb = ($image && $image->exists()) ? $image->CroppedImage(40, 40) : null;
+      return ($thumb && $thumb->exists()) ? $thumb->forTemplate() : '(No Image)';
   }
 }

@@ -7,9 +7,10 @@
  * @package swipestripe
  * @subpackage order
  */
-class Region extends DataObject {
+class Region extends DataObject
+{
   
-  /**
+    /**
    * Singular name
    * 
    * @var String
@@ -29,18 +30,18 @@ class Region extends DataObject {
    * @var Array
    */
   public static $db = array(
-		'Code' => "Varchar", 
-	  'Title' => 'Varchar'
-	);
-	
-	/**
-	 * Managed via the SiteConfig, regions are related to Countries
-	 * 
-	 * @var Array
-	 */
-	public static $has_one = array (
+        'Code' => "Varchar",
+      'Title' => 'Varchar'
+    );
+    
+    /**
+     * Managed via the SiteConfig, regions are related to Countries
+     * 
+     * @var Array
+     */
+    public static $has_one = array(
     'SiteConfig' => 'SiteConfig',
-	  'Country' => 'Country'
+      'Country' => 'Country'
   );
   
   /**
@@ -57,8 +58,9 @@ class Region extends DataObject {
   /**
    * Convenience function to prevent errors thrown
    */
-  public function forTemplate() {
-    return;   
+  public function forTemplate()
+  {
+      return;
   }
   
   /**
@@ -66,34 +68,32 @@ class Region extends DataObject {
    * 
    * @return Array 
    */
-  public static function shipping_regions() {
-
-    $countryRegions = array();
-    $regions = DataObject::get('Region_Shipping');
-    if ($regions && $regions->exists()) {
-
-      foreach ($regions as $region) {
-        $countryRegions[$region->CountryID][$region->ID] = $region->Title;
+  public static function shipping_regions()
+  {
+      $countryRegions = array();
+      $regions = DataObject::get('Region_Shipping');
+      if ($regions && $regions->exists()) {
+          foreach ($regions as $region) {
+              $countryRegions[$region->CountryID][$region->ID] = $region->Title;
+          }
       }
-    }
-	  return $countryRegions;
-	}
-	
-	/**
+      return $countryRegions;
+  }
+    
+    /**
    * Retrieve map of billing regions including Country ID
    * Not currently used
    * 
    * @return Array 
    */
-	public static function billing_regions() {
-	  
-	  $regions = DataObject::get('Region_Billing');
-    if ($regions && $regions->exists()) {
-      return $regions->map();
+    public static function billing_regions()
+    {
+        $regions = DataObject::get('Region_Billing');
+        if ($regions && $regions->exists()) {
+            return $regions->map();
+        }
+        return array();
     }
-	  return array();
-	}
-
 }
 
 /**
@@ -104,19 +104,20 @@ class Region extends DataObject {
  * @package swipestripe
  * @subpackage order
  */
-class Region_Shipping extends Region {
+class Region_Shipping extends Region
+{
 
-  /**
+    /**
    * Fields for CRUD of shipping regions
    * 
    * @see DataObject::getCMSFields()
    */
-  function getCMSFields() {
-
-    $fields = parent::getCMSFields();
-    $countryField = new DropdownField('CountryID', 'Country', Country::shipping_countries());
-    $fields->replaceField('CountryID', $countryField);
-    return $fields;
+  public function getCMSFields()
+  {
+      $fields = parent::getCMSFields();
+      $countryField = new DropdownField('CountryID', 'Country', Country::shipping_countries());
+      $fields->replaceField('CountryID', $countryField);
+      return $fields;
   }
 }
 
@@ -128,7 +129,6 @@ class Region_Shipping extends Region {
  * @package swipestripe
  * @subpackage order
  */
-class Region_Billing extends Region {
-
+class Region_Billing extends Region
+{
 }
-
